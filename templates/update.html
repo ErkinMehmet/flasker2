@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% for message in get_flashed_messages() %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{message}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+
+{% endfor %}
+
+{% if p==1 %}
+    <table class="table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Email</th>
+            <th scope="col">Couleur favorite</th>
+            <th scope="col">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for our_user in our_users %}
+            <tr>
+                <th scope="row">{{our_user.id}}</th>
+                <td><a href="{{url_for('user_bp.update',id=our_user.id)}}">{{our_user.name}}</a></td>
+                <td>{{our_user.email}}</td>
+                <td>{{our_user.favorite_color}}</td>
+                <td>{{our_user.createdAt.strftime('%Y-%m-%d %H:%M:%S')}}</td>
+            </tr>
+    
+            {% endfor %}
+        </tbody>
+      </table>
+{% else %}
+      {% if name_to_update.id==current_user.id %}
+      <h1>Liste d'utilisateurs</h1>
+      <br/>
+      <div class="shadow p-3 mb-5 bg-body rounded">
+      <form action="/update/{{name_to_update.id}}" method="POST"  enctype="multipart/form-data">
+          {{form.hidden_tag()}}
+          {{form.name.label(
+              class="form-label"
+          )}}
+          {{form.name(class="form-control",value=name_to_update.name)}}
+          <br/>
+          {{form.username.label(
+            class="form-label"
+        )}}
+        {{form.username(class="form-control",value=name_to_update.username)}}
+        <br/>
+          {{form.email.label(
+              class="form-label"
+          )}}
+          {{form.email(class="form-control",value=name_to_update.email)}}
+          <br/>
+         
+            {{form.about_author.label(
+              class="form-label"
+          )}}
+          <textarea name="about_author" class="form-control">{{name_to_update.about_author}}</textarea>
+        <br/>
+        {{form.profile_pic.label(
+          class="form-label"
+      )}}
+      {{form.profile_pic(class="form-control",value=name_to_update.favorite_color)}}
+      <br/>
+      {{form.admin.label(
+        class="form-label"
+    )}}
+    <input type="checkbox" id="admin" name="admin" value="on" {% if name_to_update.admin %} checked {% endif %}>
+      <br/><br/>
+          {{form.submit(class="btn btn-primary")}}
+
+          <a href="{{url_for('user_bp.delete',id=name_to_update.id)}}" class="btn btn-danger">Supprimer</a>
+
+      </form>
+      </div>
+      <br/><br/><br/>
+      {% else %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        Désolé; vous ne pouvez pas modifier le profil de cet utilisateur.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      {% endif %}
+{% endif %}
+{% endblock %}

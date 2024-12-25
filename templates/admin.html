@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br/>
+
+<!-- Card for the table -->
+<div class="card">
+    <div class="card-header">
+        <h4>Liste des utilisateurs</h4>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr class="text-center align-middle">
+                    <th scope="col">Photo</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Nom d'Utilisateur</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for our_user, is_friend  in our_users %}
+                <tr class="text-center align-middle">
+                    <td class="p-0" style="width: 60px; height: 60px;">
+                        <img src="{{ url_for('static', filename='/images/' + (our_user.profile_pic if our_user.profile_pic else '0.png')) }}"
+                             alt="Profile Picture" 
+                             style="width: 100%; height: 100%; object-fit: cover;">
+                    </td>
+                    <td><a href="{{ url_for('user_bp.update', id=our_user.id) }}">{{ our_user.name }}</a></td>
+                    {% if our_user.admin %}
+                    <td>{{ our_user.username }} (Admin)</td>
+                    {% else %}
+                    <td>{{ our_user.username }}</td>
+                    {% endif %}
+                    <td>{{ our_user.email }}</td>
+                    <td>{{ our_user.createdAt.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                    <td>
+                        {% if our_user.id == current_user.id or current_user.admin %}
+                        <a href="{{ url_for('user_bp.update', id=our_user.id) }}" class="btn btn-secondary btn-sm m-1" title="Modifier">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a href="{{ url_for('user_bp.delete', id=our_user.id) }}" class="btn btn-danger btn-sm m-1" title="Supprimer">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                        {% endif %}
+                        {% if our_user.id != current_user.id %}
+                            {% if not is_friend %}
+                            <a href="{{ url_for('user_bp.togglefriend', id=our_user.id) }}" class="btn btn-success btn-sm m-1" title="Add Friend">
+                                <i class="bi bi-person-plus"></i>
+                            </a>
+                            {% else %}
+                            <a href="{{ url_for('user_bp.message', id=our_user.id) }}" class="btn btn-primary btn-sm m-1" title="Message">
+                                <i class="bi bi-envelope"></i> 
+                            </a>
+                            <a href="{{ url_for('user_bp.togglefriend', id=our_user.id) }}" class="btn btn-danger btn-sm m-1" title="Unfriend">
+                                <i class="bi bi-person-dash"></i> <!-- Unfriend icon -->
+                            </a>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+{% endblock %}

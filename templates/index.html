@@ -1,0 +1,460 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+  <div class="row g-3 d-flex align-items-stretch">
+    <!-- Profile Card -->
+    <div class="col-md-3">
+      <div class="profile-card">
+        <img src="{{url_for('static',filename='images/Fer.png')}}" alt="Profile Picture">
+        <h2>{{nom}}</h2>
+        <p>{{titre}}</p>
+        <p>{{desc}}</p>
+
+        <hr/>
+        <button class="custom-btn w-100 my-2" id="modalbtn1">Apprentissage automatique par clustering</button>
+        <button class="custom-btn w-100 my-2" id="modalbtn2">Apprentissage automatique par regression</button>
+        <button class="custom-btn w-100 my-2" id="modalbtn3">Prévision avec un modèle sauvegardé </button>
+      </div>
+    </div>
+<!-- Articles -->
+<div class="col-md-9">
+  <div class="articles card h-100"><div class="card-body">
+    <h5>Articles</h5>
+    <hr/>
+    {% for post in posts %}
+    <div class="shadow   bg-body rounded">
+        <div class="d-flex justify-content-between align-items-start">
+            <!-- Post Information -->
+            <div>
+                <h5 class="post-title-link"> <a href="{{url_for('post_bp.post',id=post.id)}}">{{post.title}}</a></h5>
+                <small>{{post.poster.name}} - {{post.date_posted}} - {{post.slug}}</small><br/>
+            </div>
+
+            <!-- Buttons on the Right -->
+            <div class="d-flex flex-column align-items-end ml-3">
+              <a href="{{url_for('post_bp.post',id=post.id)}}" class="btn btn-sm mb-2" style="border: 2px solid black; color: black; background-color: transparent;" onmouseover="this.style.borderColor='#007bff'; this.style.color='white'; this.style.backgroundColor='#007bff'" onmouseout="this.style.borderColor='black'; this.style.color='black'; this.style.backgroundColor='transparent'">Visualiser</a>
+              
+              {% if post.poster_id == current_user.id %}
+              <a href="{{url_for('post_bp.edit_post',id=post.id)}}" class="btn btn-sm mb-2" style="border: 2px solid black; color: black; background-color: transparent;" onmouseover="this.style.borderColor='#007bff'; this.style.color='white'; this.style.backgroundColor='#007bff'" onmouseout="this.style.borderColor='black'; this.style.color='black'; this.style.backgroundColor='transparent'">Éditer</a>
+              {% endif %}
+            </div>
+        </div>
+    </div>
+    <hr />
+    {% endfor %}
+
+
+    </div>
+  </div>
+</div>
+   
+    <!-- The Modal -->
+    <div id="modal1" class="custom-modal" style="{% if modal==1 %} display: block; {% else %} display: none; {% endif %}">
+      <div class="custom-modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Clustering de clients</h5>
+          <span class="custom-close2">&times;</span> 
+        </div>
+
+        {% if categories ==None and pred is none %}
+        <form method="POST" class="mt-5" action="{{ url_for('core_bp.index') }}">
+          {{ clustering_form.hidden_tag() }}
+          <input type="hidden" name="form_type" value="clustering_form">
+          <div class="form-group row">
+              <label for="modele" class="col-sm-4 col-form-label">{{ clustering_form.modele.label }}</label>
+              <div class="col-sm-8">
+                  {{ clustering_form.modele(class="form-control") }}
+              </div>
+          </div>
+      
+          <div class="form-group row">
+              <label for="mesure" class="col-sm-4 col-form-label">{{ clustering_form.mesure.label }}</label>
+              <div class="col-sm-8">
+                  {{ clustering_form.mesure(class="form-control") }}
+              </div>
+          </div>
+      
+          <div class="form-group row">
+              <label for="colonnes_categories" class="col-sm-4 col-form-label">{{ clustering_form.colonnes_categories.label }}</label>
+              <div class="col-sm-8">
+                  {{ clustering_form.colonnes_categories(class="form-control") }}
+              </div>
+          </div>
+      
+          <div class="form-group row">
+              <label for="colonnes_numeriques" class="col-sm-4 col-form-label">{{ clustering_form.colonnes_numeriques.label }}</label>
+              <div class="col-sm-8">
+                  {{ clustering_form.colonnes_numeriques(class="form-control") }}
+              </div>
+          </div>
+      
+      
+          <div class="form-group row">
+              <label for="sql_query" class="col-sm-4 col-form-label">{{ clustering_form.sql_query.label }}</label>
+              <div class="col-sm-8">
+                  {{ clustering_form.sql_query(class="form-control", rows=5) }}
+              </div>
+          </div>
+      
+          <div class="form-group row">
+              <label for="random_state" class="col-sm-4 col-form-label">{{ clustering_form.random_state.label }}</label>
+              <div class="col-sm-8">
+                  {{ clustering_form.random_state(class="form-control") }}
+              </div>
+          </div>
+      
+          <div class="form-group row">
+              <label for="number_of_clusters" class="col-sm-4 col-form-label">{{ clustering_form.number_of_clusters.label }}</label>
+              <div class="col-sm-8">
+                  {{ clustering_form.number_of_clusters(class="form-control") }}
+              </div>
+            </div>
+      
+            <div class="form-group row">
+              <div class="col-sm-2">
+                  {{ clustering_form.submit(class="btn btn-primary") }}
+              </div><div class="col-sm-8">
+            </div>
+              <div class="col-sm-2">
+                <button type="button" class="btn btn-secondary btn-block annulerbtn" onclick="hideModal1()">Annuler</button>
+            </div>
+          </div>
+      </form>
+      {% elif pred is none %}
+
+      <form method="POST" class="mt-5" action="{{ url_for('core_bp.index') }}">
+        {{ form.hidden_tag() }}
+        <input type="hidden" name="form_type" value="clustering_pred">
+        <!-- Dropdowns for categories -->
+        {% for key, values in categories.items() %}
+        <div class="form-group row">
+            <label for="{{ key }}" class="col-sm-4 col-form-label">{{ key }}</label>
+            <div class="col-sm-8">
+              <select id="{{ key }}" name="{{ key }}" class="form-control">
+                  {% for value in values %}
+                  <option value="{{ value }}">{{ value }}</option>
+                  {% endfor %}
+              </select>
+          </div>
+        </div>
+        {% endfor %}
+  
+        <!-- Numeric input fields -->
+        {% for col in num %}
+        <div class="form-group row">
+            <label for="{{ col }}" class="col-sm-4 col-form-label">{{ col }}</label>
+            <div class="col-sm-8">
+              <input type="text" id="{{ col }}" name="{{ col }}" class="form-control">
+          </div>
+        </div>
+        {% endfor %}
+  
+  <!-- Submit button -->
+  <div class="form-group row">
+    <div class="col-sm-2">
+        <button type="submit" class="btn btn-primary btn-block">Envoyer</button>
+    </div>
+    <div class="col-sm-8"></div>
+    <div class="col-sm-2">
+        <button type="button" class="refreshbtn btn btn-secondary btn-block annulerbtn2" onclick="hideModal1()">Annuler</button>
+    </div>
+  </div>
+    </form>
+    {% else %}
+    <div class="modal-body">
+      <!-- Prediction result with added margins/padding -->
+      <div class="prediction-result" style="padding: 20px; margin-bottom: 20px;">
+        <h5>Prévision:</h5>
+      <p>{{ prediction.outcome[0] }}</p>
+
+      <h5>Confiance:</h5>
+      <p>{{ prediction.confidence }}</p>
+
+      <h5>Choix de mesure:</h5>
+      <p>{{ prediction.metric_name }}</p>
+      </div>
+  
+      <!-- Buttons at the bottom -->
+      <div class="form-group row" style="display:none;">
+        <div class="col-sm-2">
+          <button type="button" class="btn btn-primary btn-block">Proceed</button>
+        </div>
+        <div class="col-sm-8"></div>
+        <div class="col-sm-2">
+          <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  
+  {% endif %}
+      </div>
+    </div>
+
+    <!-- The Modal -->
+<div id="modal2" class="custom-modal" style="{% if modal==2 %} display: block; {% else %} display: none; {% endif %}">
+  <div class="custom-modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title">Regression de clients</h5>
+      <span class="custom-close2">&times;</span> 
+    </div>
+    {% if categories ==None and pred is none %}
+
+
+    <form method="POST"  class="mt-5" action="{{ url_for('core_bp.index') }}">
+      {{ regression_form.hidden_tag() }}
+      <input type="hidden" name="form_type" value="regression_form">
+      <div class="form-group row">
+        <label for="modele" class="col-sm-4 col-form-label">{{ regression_form.modele.label }}</label>
+        <div class="col-sm-8">
+          {{ regression_form.modele(class="form-control") }}
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="mesure" class="col-sm-4 col-form-label">{{ regression_form.mesure.label }}</label>
+        <div class="col-sm-8">
+          {{ regression_form.mesure(class="form-control") }}
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="colonnes_categories" class="col-sm-4 col-form-label">{{ regression_form.colonnes_categories.label }}</label>
+        <div class="col-sm-8">
+          {{ regression_form.colonnes_categories(class="form-control") }}
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="colonnes_numeriques" class="col-sm-4 col-form-label">{{ regression_form.colonnes_numeriques.label }}</label>
+        <div class="col-sm-8">
+          {{ regression_form.colonnes_numeriques(class="form-control") }}
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="colonne_sortie" class="col-sm-4 col-form-label">{{ regression_form.colonne_sortie.label }}</label>
+        <div class="col-sm-8">
+          {{ regression_form.colonne_sortie(class="form-control") }}
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="sql_query" class="col-sm-4 col-form-label">{{ regression_form.sql_query.label }}</label>
+        <div class="col-sm-8">
+          {{ regression_form.sql_query(class="form-control", rows=5) }}
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="random_state" class="col-sm-4 col-form-label">{{ regression_form.random_state.label }}</label>
+        <div class="col-sm-8">
+          {{ regression_form.random_state(class="form-control") }}
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-sm-2">
+          {{ regression_form.submit(class="btn btn-primary") }}
+        </div>
+        <div class="col-sm-8">
+        </div>
+        <div class="col-sm-2">
+          <button type="button" class="btn btn-secondary btn-block annulerbtn" onclick="hideModal2()">Annuler</button>
+        </div>
+      </div>
+    </form>
+{% elif pred is none %}
+
+    <form method="POST" class="mt-5" action="{{ url_for('core_bp.index') }}">
+      {{ form.hidden_tag() }}
+      <input type="hidden" name="form_type" value="regression_pred">
+      <!-- Dropdowns for categories -->
+      {% for key, values in categories.items() %}
+      <div class="form-group row">
+          <label for="{{ key }}" class="col-sm-4 col-form-label">{{ key }}</label>
+          <div class="col-sm-8">
+            <select id="{{ key }}" name="{{ key }}" class="form-control">
+                {% for value in values %}
+                <option value="{{ value }}">{{ value }}</option>
+                {% endfor %}
+            </select>
+        </div>
+      </div>
+
+
+
+      {% endfor %}
+
+      <!-- Numeric input fields -->
+      {% for col in num %}
+      <div class="form-group row">
+          <label for="{{ col }}" class="col-sm-4 col-form-label">{{ col }}</label>
+          <div class="col-sm-8">
+            <input type="text" id="{{ col }}" name="{{ col }}" class="form-control">
+        </div>
+      </div>
+      {% endfor %}
+
+<!-- Submit button -->
+<div class="form-group row">
+  <div class="col-sm-2">
+      <button type="submit" class="btn btn-primary btn-block">Envoyer</button>
+  </div>
+  <div class="col-sm-8"></div>
+  <div class="col-sm-2">
+      <button type="button" class="refreshbtn btn btn-secondary btn-block annulerbtn2" data-dismiss="modal2" onclick="hideModal2()">Annuler</button>
+  </div>
+</div>
+  </form>
+  {% else %}
+  <div class="modal-body">
+    <!-- Prediction result with added margins/padding -->
+    <div class="prediction-result" style="padding: 20px; margin-bottom: 20px;">
+      <h5>Prévision:</h5>
+      <p>{{ prediction.outcome[0] }}</p>
+
+      <h5>Confiance:</h5>
+      <p>{{ prediction.confidence }}</p>
+
+      <h5>Choix de mesure:</h5>
+      <p>{{ prediction.metric_name }}</p>
+    </div>
+
+    <!-- Buttons at the bottom -->
+    <div class="form-group row" style="display:none;">
+      <div class="col-sm-2">
+        <button type="button" class="btn btn-primary btn-block">Proceed</button>
+      </div>
+      <div class="col-sm-8"></div>
+      <div class="col-sm-2">
+        <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal2">Close</button>
+      </div>
+    </div>
+  </div>
+
+{% endif %}
+  </div>
+</div>
+
+
+
+
+  <!-- The Modal -->
+  <div id="modal3" class="custom-modal" style="{% if modal==3 %} display: block; {% else %} display: none; {% endif %}">
+    <div class="custom-modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Régression de Clients</h5>
+        <span class="custom-close2">&times;</span>
+      </div>
+      <form method="post" class="mt-5" action="{{ url_for('core_bp.index') }}">
+        <input type="hidden" name="form_type" id="selected_predictor" value="clustering_form">
+        <div class="form-group row">
+          <label for="algorithm" class="col-sm-4 col-form-label">Choisissez un algorithme:</label>
+          <div class="col-sm-8">
+            <select id="algorithm" name="algorithm" class="form-control" onchange="updateFileOptions()">
+              <option value="Arbre de décision" selected>Arbre de décision</option>
+            </select>
+          </div>
+        </div>
+      
+        <!-- Model File Selection -->
+        <div class="form-group row">
+          <label for="model-file" class="col-sm-4 col-form-label">Choisissez un fichier modèle:</label>
+          <div class="col-sm-8">
+            <select id="model-file" name="model_file" class="form-control">
+              <!-- This will be populated dynamically -->
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-2">
+              {{ clustering_form.submit(class="btn btn-primary") }}
+          </div><div class="col-sm-8">
+        </div>
+          <div class="col-sm-2">
+            <button type="button" class="btn btn-secondary btn-block annulerbtn" onclick="hideModal3()">Annuler</button>
+        </div>
+      </div>
+
+      </form>
+    </div>
+  </div>
+
+  </div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- Link to your JavaScript file -->
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+<script>
+  const getModelFilesUrl = "{{ url_for('core_bp.get_model_files') }}";
+  function refreshPage() {
+    location.reload();
+  }
+
+  function hideModal1() {
+    const modal = document.getElementById('modal1');
+    if (modal) {
+      modal.style.display = 'none';
+    }
+  }
+    function hideModal2() {
+      const modal = document.getElementById('modal2');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    }
+    function hideModal3() {
+      const modal = document.getElementById('modal3');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    function updateFileOptions() {
+      const algorithm = document.getElementById("algorithm").value;
+      const modelFileSelect = document.getElementById("model-file");
+      const hiddenField = document.getElementById("selected_predictor");
+      if (algorithm == "K Means") {
+        hiddenField.value = "clustering_form";
+      } else {
+        hiddenField.value = "regression_form";
+      }
+
+      modelFileSelect.innerHTML = '<option>Chargement en cours...</option>';
+
+      fetch(getModelFilesUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ algorithm }),
+      })
+        .then(response => response.json())
+        .then(files => {
+          modelFileSelect.innerHTML = ''; // Clear loading option
+          if (files.length === 0) {
+            modelFileSelect.innerHTML = '<option>Pas de fichiers disponibles</option>';
+          } else {
+            files.forEach(file => {
+              const option = document.createElement('option');
+              option.value = file;
+              option.textContent = file;
+              modelFileSelect.appendChild(option);
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Erreur en essayant de trouver des fichiers:', error);
+          modelFileSelect.innerHTML = '<option>Erreur de chargement</option>';
+        });
+    }
+
+    window.onload = function () {
+      updateFileOptions();
+    };
+</script>
+{% endblock %}

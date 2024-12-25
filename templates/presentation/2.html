@@ -1,0 +1,183 @@
+{% extends 'presentation/presentation_base.html' %}
+
+{% block slide_content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>Évolution avant et après de rejoindre la FQM</h5>
+    </div>
+    <div class="card-body">
+        <div class="skills-grid">
+            {% for i in range(1, 5) %}
+            <div class="skill-card card-{{ i }}">
+                <div class="card-front card-front-{{ i }}">
+                    <!-- Use a clock icon for the past -->
+                    <i class="fa fa-clock fa-3x"></i>
+                    {% if i == 1 %}
+                    <p>Données: maîtrise de langages tels que <span class="highlight-skill">VBA
+
+                    </span>, <span class="highlight-skill">SQL
+
+                    </span> et <span class="highlight-skill">Python</span>, 
+                    expérience avec des outils tels que Power BI</p>
+                    {% elif i == 2 %}
+                        <p>Développement web: full-stack avec <span class="highlight-skill">
+                            PHP</span>/<span class="highlight-skill">HTML</span>/<span class="highlight-skill">Bootstrap
+
+                            </span>/<span class="highlight-skill">JS</span>, connaissance limitée avec les frameworks</p>
+                    {% elif i == 3 %}
+                        <p>Peu de connaissance sur l'architecture de logiciel</p>
+                    {% elif i == 4 %}
+                        <p>Versatilité, motivation et passion pour jongler avec de nombreux projets</p>
+                    {% endif %}
+
+                </div>
+                <div class="card-back card-back-{{ i }}">
+                    <!-- Use a modern arrow or play icon for the present -->
+                    <i class="fa fa-play fa-3x"></i>
+
+                    {% if i== 1 %}
+                    <p>Données: algorithmes de machine learning, tests statistiques, visualisation programmatiques avec R et Python, maîtrise de Python, développement d'API REST</p>
+                    {% elif i == 2 %}
+                    <p>Développement web: full-stack avec des frameworks modernes, y compris <span class="highlight-skill">Vue</span>, <span class="highlight-skill">EntityFramework</span>,<span class="highlight-skill">Flask</span> </p>
+                    {% elif i == 3 %}
+                    <p>Connaissance solide sur <span class="highlight-skill">l'architecture contemporaire</span> (Java/Python/.Net),
+                         <span class="highlight-skill">kubernetes</span>, déploiement par <span class="highlight-skill">pipelines</span> sur Azure et contenantisé 
+                        (<span class="highlight-skill">Docker</span>)</p>
+                    {% elif i == 4 %}
+                    <p>Engouement sempiternel pour une amélioration continue du travail, lien fortifié au fil de temps avec la FQM ❤️</p>
+                    {% endif %}
+                    
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.skill-card').forEach(function (card) {
+            card.addEventListener('click', function () {
+                card.classList.toggle('flipped');
+            });
+        });
+    });
+</script>
+
+<style>
+    .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* Changed to 2 columns for 4 cards */
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .skill-card {
+        perspective: 1000px;
+        width: 100%;
+        aspect-ratio: 1;
+        /* Increased height for better visibility */
+    }
+
+    .skill-card .card-front, .skill-card .card-back {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        backface-visibility: hidden;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-size: 22px;
+        color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        transition: transform 0.6s, opacity 0.3s, box-shadow 0.3s;
+        opacity: 1;
+    }
+
+    .card-1 .card-front, .card-1 .card-back {
+        background-color: #A8D8FF; /* Light Blue */
+    }
+    
+    .card-2 .card-front, .card-2 .card-back {
+        background-color: #A8D8A8; /* Light Greenish-Purple Blue */
+    }
+    
+    .card-3 .card-front, .card-3 .card-back {
+        background-color: #B0E0E6; /* Powder Blue */
+    }
+    
+    .card-4 .card-front, .card-4 .card-back {
+        background-color: #D0B0FF; /* Light Lavender */
+    }
+
+    .skill-card .card-front {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .skill-card .card-back {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: rotateY(180deg);
+    }
+
+    .skill-card.flipped .card-front {
+        transform: rotateY(180deg);
+    }
+
+    .skill-card.flipped .card-back {
+        transform: rotateY(0);
+    }
+
+    /* Hover Effect: Change opacity and add box shadow */
+    .skill-card:hover .card-front, .skill-card:hover .card-back {
+        opacity: 0.8;
+    }
+
+    /* Add a colored box shadow on hover for front and back */
+.card-1 .card-front:hover, .card-1 .card-back:hover {
+    box-shadow: 0 0 20px 10px rgba(168, 216, 255, 0.7);
+    cursor: pointer;
+}
+
+.card-2 .card-front:hover, .card-2 .card-back:hover {
+    box-shadow: 0 0 20px 10px rgba(168, 216, 168, 0.7); /* Slightly light greenish hue */
+    cursor: pointer;
+}
+
+.card-3 .card-front:hover, .card-3 .card-back:hover {
+    box-shadow: 0 0 20px 10px rgba(176, 224, 230, 0.7);
+    cursor: pointer;
+}
+
+.card-4 .card-front:hover, .card-4 .card-back:hover {
+    box-shadow: 0 0 20px 10px rgba(208, 176, 255, 0.7);
+    cursor: pointer;
+}
+
+    .skill-card:hover {
+        cursor: pointer;
+    }
+
+    /* Text Visibility Enhancement */
+    .skill-card .card-front p, .skill-card .card-back p {
+        font-weight: 500;
+        text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.85); /* Subtle text shadow for better readability */
+    }
+    .highlight-skill {
+        font-weight: bold; /* Make it bold */
+        color: #f39c12; /* Use a gold color for emphasis, adjust as needed */
+        background-color: #fff5e1; /* Light background to make it stand out */
+        padding: 2px 5px; /* Add a little padding around the highlighted skill */
+        border-radius: 5px; /* Slight rounding of corners */
+        box-shadow: 0 0 5px rgba(243, 156, 18, 0.7); /* Add a subtle shadow for extra emphasis */
+        text-shadow: 0px 0px 0px rgba(0, 0, 0, 0.85);
+    }
+    
+</style>
+{% endblock %}

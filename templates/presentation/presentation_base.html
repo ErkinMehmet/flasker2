@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Présentation{% endblock %}
+
+{% block content %}
+<div class="slide-container mt-5">
+    {% block slide_content %}
+    {% endblock %}
+</div>
+
+
+<!-- Slide navigation (arrows) -->
+<div class="d-flex justify-content-between mt-3">
+    {% if slide_number > 1 %}
+        <a href="{{ url_for('presentation_bp.presentation', slide_number=slide_number-1) }}" class="btn btn-primary">&larr; Prédédent</a>
+    {% endif %}
+
+    <div class="ml-auto">
+        {% if slide_number < 5 %}
+            <a href="{{ url_for('presentation_bp.presentation', slide_number=slide_number+1) }}" class="btn btn-primary">Suivant &rarr;</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

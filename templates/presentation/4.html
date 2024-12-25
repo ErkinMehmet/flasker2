@@ -1,0 +1,112 @@
+{% extends 'presentation/presentation_base.html' %}
+
+{% block slide_content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>Mes Capacités</h5>
+    </div>
+    <div class="card-body">
+        <p>Voici une liste de mes capacités regroupées par catégorie :</p>
+        
+        <div id="skillsAccordion">
+            <!-- Programming Languages -->
+            <div class="card">
+                <div class="card-header" id="headingLanguages">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseLanguages" aria-expanded="true" aria-controls="collapseLanguages">
+                            Langages de Programmation
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseLanguages" class="collapse show" aria-labelledby="headingLanguages" data-parent="#skillsAccordion">
+                    <div class="card-body">
+                        <ul>
+                            <li>Python</li>
+                            <li>Java, Kotlin</li>
+                            <li>C#, .NET</li>
+                            <li>JavaScript</li>
+                            <li>PHP</li>
+                            <li>R</li>
+                            <li>VBA</li>
+                            <li>Fortran, C, Pascal</li>
+                            <li>PL/SQL, SAS</li>
+                            <li>Matlab</li>
+                            <li>AL language</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Frameworks and Tools -->
+            <div class="card">
+                <div class="card-header" id="headingFrameworks">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFrameworks" aria-expanded="false" aria-controls="collapseFrameworks">
+                            Frameworks et Outils
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseFrameworks" class="collapse" aria-labelledby="headingFrameworks" data-parent="#skillsAccordion">
+                    <div class="card-body">
+                        <ul>
+                            <li>Vue.js, Nuxt.js, Vite, TailWind CSS, HTML</li>
+                            <li>ASP.NET, Entity Framework Core</li>
+                            <li>Flask</li>
+                            <li>Laravel</li>
+                            <li>TensorFlow</li>
+                            <li>Docker, Kubernetes</li>
+                            <li>RabbitMQ</li>
+                            <li>Terraform</li>
+                            <li>Bash</li>
+                            <li>Windows PowerShell</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cloud and Platforms -->
+            <div class="card">
+                <div class="card-header" id="headingCloud">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseCloud" aria-expanded="false" aria-controls="collapseCloud">
+                            Cloud et Plateformes
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseCloud" class="collapse" aria-labelledby="headingCloud" data-parent="#skillsAccordion">
+                    <div class="card-body">
+                        <ul>
+                            <li>Google Cloud Platform (GCP)</li>
+                            <li>Azure</li>
+                            <li>AWS</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other Skills -->
+            <div class="card">
+                <div class="card-header" id="headingOther">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOther" aria-expanded="false" aria-controls="collapseOther">
+                            Autres Compétences
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseOther" class="collapse" aria-labelledby="headingOther" data-parent="#skillsAccordion">
+                    <div class="card-body">
+                        <ul>
+                            <li>TDD (Test Driven Development)</li>
+                            <li>Machine Learning avec des textes, des graphiques etc.</li>
+                            <li>Data Mining</li>
+                            <li>Optimisation des algorithmes</li>
+                            <li>Tests statistiques</li>
+                            <li>Informatique Quantique</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

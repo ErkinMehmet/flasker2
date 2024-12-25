@@ -1,0 +1,113 @@
+{% extends 'presentation/presentation_base.html' %}
+
+{% block slide_content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>Énoncé</h5>
+    </div>
+    <div class="card-body">
+        <div class="bubble left">
+            <p>
+                Ce projet comporte plusieurs aspects, tels que la partie de prévision et de regroupement par des algorithmes de machine learning et celle de messenger simplifié
+                qui marche avec <span class="highlight" data-toggle="tooltip" title="Socket.IO permet une communication en temps réel entre le client et le serveur via WebSockets.">socketio</span>.
+            </p>
+        </div>
+        <div class="bubble right">
+            <p>
+                Concrètement, son backend fut créé à la base de 
+                <span class="highlight" data-toggle="tooltip" title="Flask est un micro framework web pour Python, parfait pour construire des applications web modernes.">Flask</span>
+                avec une architecture contemporaine, qui consiste à orchestrer les modèles, les fonctions, les routes, le middleware,
+                les vues, les fichiers statiques, les enums, etc.
+            </p>
+        </div>
+        <div class="bubble left">
+            <p>
+                Il est à souligner que le backend a déjà un interface monté avec 
+                <span class="highlight" data-toggle="tooltip" title="Bootstrap est un framework CSS pour concevoir des interfaces utilisateur réactives et modernes.">Bootstrap</span>, mais il fonctionne également avec un frontend échafaudé avec
+                <span class="highlight" data-toggle="tooltip" title="Vue 3 est un framework JavaScript progressif utilisé pour construire des interfaces utilisateur modernes.">Vue 3</span>,
+                grâce à <span class="highlight" data-toggle="tooltip" title="CORS (Cross-Origin Resource Sharing) permet aux applications web d'accéder en toute sécurité aux ressources sur des domaines différents.">Cors</span>.
+            </p>
+        </div>
+        <div class="bubble right">
+            <p>
+                En sus, mes anciens projets qui eurent été créés avec 
+                <span class="highlight" data-toggle="tooltip" title="PHP est un langage de programmation côté serveur utilisé pour le développement web.">PHP</span>
+                entre 2018 et 2020 y furent ajoutés, pour montrer mon évolution au cours des dernières années en tant que développeur full-stack.
+            </p>
+        </div>
+        <div class="bubble left">
+            <p>
+                Pour faciliter le développement, l'environnement virtuel de
+                <span class="highlight" data-toggle="tooltip" title="Les environnements virtuels Python isolent les dépendances pour un projet spécifique.">Python</span>
+                fut utilisé et un <span class="highlight" data-toggle="tooltip" title="Un Makefile automatise les tâches courantes comme l'installation et le déploiement.">Makefile</span> s'y trouve, 
+                pour simplifier l'installation du nécessaire et le déploiement du projet.
+            </p>
+        </div>
+        <div class="bubble right">
+            <p>
+                Pour démarrer ce projet, il faudrait télécharger ces applications et définir la variable de PATH aux besoins:
+                <span class="highlight" data-toggle="tooltip" title="Make est un outil d'automatisation de compilation qui utilise des Makefiles pour simplifier les tâches.">make</span>,
+                <span class="highlight" data-toggle="tooltip" title="Yarn est un gestionnaire de paquets pour les projets JavaScript.">yarn</span>,
+                <span class="highlight" data-toggle="tooltip" title="Vue CLI est un outil en ligne de commande pour échafauder des projets Vue.js.">vue</span>,
+                <span class="highlight" data-toggle="tooltip" title="Python est un langage de programmation polyvalent utilisé pour le développement backend.">python</span>,
+                <span class="highlight" data-toggle="tooltip" title="Pip est l'installateur de paquets pour Python.">pip</span>.
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Enable Bootstrap tooltips
+    document.addEventListener('DOMContentLoaded', function () {
+        $("[data-toggle='tooltip']").tooltip();
+    });
+</script>
+
+<style>
+    .highlight {
+        color: #007bff;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .highlight:hover {
+        text-decoration: underline;
+    }
+    .bubble {
+        max-width: 80%;
+        padding: 15px;
+        margin: 10px;
+        border-radius: 20px;
+        font-size: 16px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+    .bubble.left {
+        background-color: #e7f3ff;
+        color: #003f7f;
+        margin-right: auto;
+    }
+    .bubble.right {
+        background-color: #d9ecff;
+        color: #002f5f;
+        margin-left: auto;
+    }
+    .bubble::after {
+        content: '';
+        position: absolute;
+        top: 15px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+    }
+    .bubble.left::after {
+        left: -10px;
+        border-width: 10px 10px 10px 0;
+        border-color: transparent #e7f3ff transparent transparent;
+    }
+    .bubble.right::after {
+        right: -10px;
+        border-width: 10px 0 10px 10px;
+        border-color: transparent transparent transparent #d9ecff;
+    }
+</style>
+{% endblock %}

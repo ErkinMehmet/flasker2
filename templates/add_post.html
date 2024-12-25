@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% for message in get_flashed_messages() %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{message}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+
+{% endfor %}
+
+{% if current_user.is_authenticated %}
+    <h4 class="card-title">Ajouter un article</h4>
+    <br/>
+    <div class="shadow p-3 mb-5 bg-body rounded">
+    <form method="POST">
+        {{form.hidden_tag()}}
+        {{form.title.label(
+            class="form-label"
+        )}}
+        {{form.title(class="form-control")}}
+        
+        <br/>
+        {{form.slug.label(
+          class="form-label"
+      )}}
+      {{form.slug(class="form-control")}}
+      <br/>
+        {{form.content.label(
+          class="form-label"
+      )}}
+      <textarea name="content" id="editor" class="form-control"></textarea>
+      <br/>
+        {{form.submit(class="btn btn-primary")}}
+    </form>
+    <script>
+      ClassicEditor
+          .create(document.querySelector('#editor'), {
+              ckfinder: {
+                  uploadUrl: '/upload-image'  // The URL to handle the image upload
+              },
+              toolbar: [
+                  'heading', '|', 'bold', 'italic', 'link', '|', 'imageUpload' // Add image upload button to the toolbar
+              ]
+          })
+          .catch(error => {
+              console.error(error);
+          });
+  </script>
+    </div>
+<br/><br/><br/>
+{% else %} <div class="full-screen-center">
+  <div>
+<h4>Il faudrait vous connecter dans <span id="countdown">5</span> secondes, ou cliquer sur le lien en bas pour vous diriger vers la page de connexion:</h4>
+<a href="{{ url_for('core_bp.login') }}" class="mt-10">Se connecter</a></div>
+</div>
+<script>
+    // Countdown and redirect script
+    let countdownElement = document.getElementById('countdown');
+    let secondsRemaining = 5;
+
+    function updateCountdown() {
+        if (secondsRemaining > 0) {
+            secondsRemaining--;
+            countdownElement.textContent = secondsRemaining;
+        } else {
+            // Redirect to login page after countdown
+            window.location.href = "{{ url_for('core_bp.login') }}";
+        }
+    }
+
+    // Update countdown every second
+    setInterval(updateCountdown, 1000);
+</script>
+
+{% endif %}
+{% endblock %}
