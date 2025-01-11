@@ -7,3 +7,4 @@ from .api import api_bp
 from .auth import auth_bp
 from .presentation import presentation_bp
 from .ai import ai_bp
+from .stripe import stripe_bp

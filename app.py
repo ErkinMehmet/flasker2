@@ -18,7 +18,7 @@ from flask_redis import FlaskRedis
 from flasgger import Swagger
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit, join_room, leave_room
-import openai
+from openai import OpenAI
 import getpass
 
 from flasker.regressors.dt import train_dt_predictor
@@ -35,7 +35,9 @@ db=SQLAlchemy()
 migrate=Migrate()
 login_manager=LoginManager()
 socketio = SocketIO()
-openai.api_key=os.getenv("OPENAI", "default_api_key")
+
+openai_key=os.getenv("OPENAI", "default_api_key")
+openai_client = OpenAI(api_key=openai_key)
 
 def admin_required(f):
     @wraps(f)
@@ -46,10 +48,11 @@ def admin_required(f):
     return decorated_function
 
 from flasker.models import Posts,Users,Articles,Messages
-from flasker.routes import user_bp,post_bp,test_bp,core_bp,admin_bp,api_bp,auth_bp,presentation_bp,ai_bp
+from flasker.routes import user_bp,post_bp,test_bp,core_bp,admin_bp,api_bp,auth_bp,presentation_bp,ai_bp,stripe_bp
 
 def create_app(env: AppEnvironment = None) -> Flask:
     app=Flask(__name__)
+
 
     ckeditor=CKEditor(app)
     # ajouter la bd SQLite
@@ -116,6 +119,7 @@ def create_app(env: AppEnvironment = None) -> Flask:
     app.register_blueprint(auth_bp)
     app.register_blueprint(presentation_bp)
     app.register_blueprint(ai_bp)  
+    app.register_blueprint(stripe_bp)  
 
     @app.context_processor
     def base():

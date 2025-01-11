@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,SubmitField,PasswordField,BooleanField,ValidationError,SelectField,IntegerField
-from wtforms.validators import DataRequired,EqualTo,Length
+from wtforms import StringField,SubmitField,PasswordField,BooleanField,ValidationError,SelectField,IntegerField,TextAreaField
+from wtforms.validators import DataRequired,EqualTo,Length, Email
 from wtforms.widgets import TextArea
 from flask_ckeditor import CKEditorField
 from flask_wtf.file import FileField
@@ -78,3 +78,8 @@ class RegressionForm(FlaskForm):
     random_state = IntegerField('Random State', validators=[DataRequired()], default=42)  # Valeur par défaut
     submit = SubmitField('Soumettre')
 
+class ContactForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    phone = StringField('Phone', validators=[DataRequired(), Length(min=10, max=15)])
+    title = StringField('Title', validators=[DataRequired()])
+    message = TextAreaField('Message', validators=[DataRequired()])

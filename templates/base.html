@@ -579,7 +579,8 @@ style="display: none;"
         fetch('/load_more_messages', { method: 'GET' })
           .then(response => response.json())
           .then(data => {
-            if (data.messages) {
+            console.log(data);
+            if (data.messages && data.messages.length>0) {
               messages.forEach(message => {
                 const messageElement = document.createElement('div');
                 messageElement.classList.add('chat-message');
@@ -702,7 +703,7 @@ style="display: none;"
           <li><a href="#" class="text-white">Prévision QM</a></li>
           <li><a href="#" class="text-white">Projet de rapports</a></li>
           <li><a href="{{ g.sitephp +'t3.php' }}" class="text-white" target="_blank">Messenger</a></li>
-          <li><a href="#" class="text-white">Apps</a></li>
+          <li><a href="{{url_for('stripe_bp.home')}}" class="text-white">Payer un café</a></li>
         </ul>
       </div>
 
@@ -713,7 +714,7 @@ style="display: none;"
           <li><a href="#" class="text-white">FAQ</a></li>
           <li><a href="#" class="text-white">Centre d'aide</a></li>
           <li><a href="#" class="text-white">Contact</a></li>
-          <li><a href="#" class="text-white">Termes & conditions</a></li>
+          <li><a href="https://erkinmehmet.github.io/privacy-policy" class="text-white">Termes & conditions</a></li>
         </ul>
       </div>
 
